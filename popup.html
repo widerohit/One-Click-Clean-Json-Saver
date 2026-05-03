@@ -13,6 +13,16 @@
         --muted: #667085;
         --accent: #0f766e;
         --accent-dark: #115e59;
+        --blue: #2563eb;
+        --blue-dark: #1d4ed8;
+        --amber: #b45309;
+        --amber-dark: #92400e;
+        --red: #dc2626;
+        --red-dark: #b91c1c;
+        --accent-soft: #ecfdf5;
+        --blue-soft: #eff6ff;
+        --amber-soft: #fffbeb;
+        --red-soft: #fef2f2;
         --surface: #ffffff;
         --soft: #f5f7fa;
       }
@@ -35,13 +45,38 @@
       }
 
       h1 {
-        margin: 0 0 10px;
+        margin: 0;
         font-size: 17px;
         font-weight: 700;
       }
 
+      .header-top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 6px;
+      }
+
+      .control-row {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+
+      .search-row {
+        display: flex;
+        gap: 6px;
+      }
+
       #searchInput {
-        width: 100%;
+        flex: 1 1 auto;
+        min-width: 0;
         height: 34px;
         padding: 0 10px;
         border: 1px solid var(--border);
@@ -49,8 +84,48 @@
         font-size: 13px;
       }
 
+      button.save-search {
+        flex: 0 0 auto;
+        width: 54px;
+        height: 34px;
+        border-color: var(--blue);
+        background: var(--blue-soft);
+        color: var(--blue-dark);
+      }
+
+      .filters {
+        display: grid;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .filter-row {
+        display: flex;
+        gap: 6px;
+      }
+
+      .filter-row select,
+      #domainFilterInput {
+        min-width: 0;
+        height: 30px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 0 8px;
+        background: #fff;
+        color: var(--text);
+        font-size: 12px;
+      }
+
+      .filter-row select {
+        flex: 1 1 0;
+      }
+
+      #domainFilterInput {
+        width: 100%;
+      }
+
       main {
-        max-height: 382px;
+        max-height: 300px;
         overflow-y: auto;
       }
 
@@ -69,6 +144,11 @@
 
       .request:hover {
         background: var(--soft);
+      }
+
+      .request.active-preview {
+        border-left: 3px solid var(--blue);
+        background: var(--blue-soft);
       }
 
       .request-top {
@@ -105,6 +185,22 @@
         font-weight: 700;
       }
 
+      .count {
+        flex: 0 0 auto;
+        padding: 2px 6px;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: #3730a3;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .request-meta {
+        margin-top: 7px;
+        color: var(--muted);
+        font-size: 11px;
+      }
+
       .actions {
         display: flex;
         gap: 8px;
@@ -125,16 +221,184 @@
       button.primary {
         flex: 1 1 auto;
         border-color: var(--accent);
-        background: var(--accent);
-        color: #fff;
+        background: var(--accent-soft);
+        color: var(--accent-dark);
+      }
+
+      button.primary:hover {
+        background: #d1fae5;
       }
 
       button.secondary {
-        width: 68px;
+        width: 70px;
+      }
+
+      button.clear {
+        flex: 0 0 auto;
+        width: 58px;
+        height: 28px;
+        border-color: var(--red);
+        background: var(--red-soft);
+        color: var(--red-dark);
+      }
+
+      button.export {
+        flex: 0 0 auto;
+        width: 82px;
+        height: 28px;
+        border-color: var(--accent);
+        background: var(--accent-soft);
+        color: var(--accent-dark);
+      }
+
+      button.toggle,
+      button.options {
+        flex: 1 1 0;
+        height: 30px;
+      }
+
+      button.toggle {
+        border-color: var(--amber);
+        background: var(--amber-soft);
+        color: var(--amber-dark);
+      }
+
+      button.options,
+      button.preview {
+        border-color: var(--blue);
+        background: var(--blue-soft);
+        color: var(--blue-dark);
+      }
+
+      button.preview {
+        width: 76px;
       }
 
       button:hover {
         filter: brightness(0.96);
+      }
+
+      button.clear:hover {
+        background: #fee2e2;
+      }
+
+      button.export:hover {
+        background: #d1fae5;
+      }
+
+      button.toggle:hover {
+        background: #fef3c7;
+      }
+
+      button.options:hover,
+      button.preview:hover,
+      button.save-search:hover {
+        background: #dbeafe;
+      }
+
+      #previewPanel {
+        display: none;
+        border-top: 1px solid var(--border);
+        background: #fbfcfe;
+      }
+
+      .preview-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .preview-search {
+        display: grid;
+        gap: 6px;
+        padding: 8px 14px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .preview-search-row {
+        display: flex;
+        gap: 6px;
+      }
+
+      #previewSearchInput {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: 100%;
+        height: 30px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 0 8px;
+        font-size: 12px;
+      }
+
+      .search-nav {
+        width: 34px;
+      }
+
+      #previewSearchStatus {
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      .preview-title {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .preview-actions {
+        display: flex;
+        gap: 6px;
+      }
+
+      #previewContent {
+        max-height: 180px;
+        margin: 0;
+        padding: 12px 14px;
+        overflow: auto;
+        color: #111827;
+        font-family: Consolas, Monaco, "Courier New", monospace;
+        font-size: 11px;
+        line-height: 1.45;
+        white-space: pre;
+      }
+
+      .json-key {
+        color: #1d4ed8;
+      }
+
+      .json-string {
+        color: #047857;
+      }
+
+      .json-number {
+        color: #b45309;
+      }
+
+      .json-boolean {
+        color: #7c3aed;
+      }
+
+      .json-null {
+        color: #b91c1c;
+      }
+
+      mark {
+        border-radius: 3px;
+        background: #fef08a;
+        color: inherit;
+        padding: 0 1px;
+      }
+
+      mark.active-match {
+        background: #f97316;
+        color: #fff;
       }
 
       footer {
@@ -147,12 +411,58 @@
   </head>
   <body>
     <header>
-      <h1>Clean JSON Saver</h1>
-      <input id="searchInput" type="search" placeholder="Search captured API URLs">
+      <div class="header-top">
+        <h1>Clean JSON Saver</h1>
+        <div class="header-actions">
+          <button id="exportAllButton" class="export" type="button">Export ZIP</button>
+          <button id="clearButton" class="clear" type="button">Clear</button>
+        </div>
+      </div>
+      <div class="control-row">
+        <button id="captureToggleButton" class="toggle" type="button">Pause Capture</button>
+        <button id="optionsButton" class="options" type="button">Options</button>
+      </div>
+      <div class="search-row">
+        <input id="searchInput" type="search" placeholder="Search URL or JSON">
+        <button id="saveSearchButton" class="save-search" type="button">Save</button>
+      </div>
+      <div class="filters">
+        <div class="filter-row">
+          <select id="statusFilter" aria-label="Filter by status">
+            <option value="all">All Status</option>
+            <option value="2xx">2xx success</option>
+            <option value="3xx">3xx redirect</option>
+            <option value="4xx">4xx client error</option>
+            <option value="5xx">5xx server error</option>
+          </select>
+          <select id="methodFilter" aria-label="Filter by method">
+            <option value="all">All methods</option>
+          </select>
+        </div>
+        <input id="domainFilterInput" type="search" placeholder="Filter by domain">
+      </div>
     </header>
     <main id="requestList">
       <div class="status">Open a page that calls JSON APIs, then use the site normally.</div>
     </main>
+    <section id="previewPanel" aria-live="polite">
+      <div class="preview-header">
+        <div id="previewTitle" class="preview-title">JSON Preview</div>
+        <div class="preview-actions">
+          <button id="previewModeButton" class="secondary" type="button">Raw</button>
+          <button id="closePreviewButton" class="secondary" type="button">Close</button>
+        </div>
+      </div>
+      <div class="preview-search">
+        <div class="preview-search-row">
+          <input id="previewSearchInput" type="search" placeholder="Search inside JSON">
+          <button id="previousMatchButton" class="search-nav" type="button" aria-label="Previous match" title="Previous match">‹</button>
+          <button id="nextMatchButton" class="search-nav" type="button" aria-label="Next match" title="Next match">›</button>
+        </div>
+        <div id="previewSearchStatus">No search term.</div>
+      </div>
+      <pre id="previewContent"></pre>
+    </section>
     <footer id="footerStatus">Showing valid JSON responses only.</footer>
     <script src="popup.js"></script>
   </body>
