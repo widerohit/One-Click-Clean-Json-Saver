@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>One-Click Clean JSON Saver Options</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Arial, Helvetica, sans-serif;
+        --border: #d8dde6;
+        --text: #1f2937;
+        --muted: #667085;
+        --accent: #0f766e;
+        --soft: #f5f7fa;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 28px 18px;
+        color: var(--text);
+        background: #fff;
+      }
+
+      h1 {
+        margin: 0 0 6px;
+        font-size: 24px;
+      }
+
+      p {
+        margin: 0 0 22px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      form {
+        display: grid;
+        gap: 18px;
+      }
+
+      label {
+        display: grid;
+        gap: 7px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 9px 10px;
+        font: inherit;
+      }
+
+      textarea {
+        min-height: 92px;
+        resize: vertical;
+      }
+
+      .toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--soft);
+      }
+
+      .toggle input {
+        width: auto;
+      }
+
+      .hint {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 400;
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      button {
+        height: 36px;
+        border: 1px solid var(--accent);
+        border-radius: 6px;
+        padding: 0 14px;
+        background: var(--accent);
+        color: #fff;
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      #status {
+        color: var(--muted);
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>One-Click Clean JSON Saver</h1>
+    <p>Configure capture behavior and cleaning rules. All settings stay local in Chrome.</p>
+
+    <form id="optionsForm">
+      <div class="toggle">
+        <label for="captureEnabled">
+          Capture API responses
+          <span class="hint">Turn this off when you want the extension to stop collecting responses.</span>
+        </label>
+        <input id="captureEnabled" type="checkbox">
+      </div>
+
+      <label for="maxRequests">
+        Max responses per tab
+        <input id="maxRequests" type="number" min="10" max="200" step="10">
+        <span class="hint">Allowed range: 10 to 200.</span>
+      </label>
+
+      <label for="defaultSearchText">
+        Default search text
+        <input id="defaultSearchText" type="text" placeholder="Example: posts">
+        <span class="hint">Used when the popup opens and no saved popup search exists.</span>
+      </label>
+
+      <label for="cleanFields">
+        Fields to remove when cleaning JSON
+        <textarea id="cleanFields" spellcheck="false"></textarea>
+        <span class="hint">Comma-separated keys. Example: headers,cookies,metadata,config,request</span>
+      </label>
+
+      <div class="actions">
+        <button type="submit">Save Options</button>
+        <span id="status"></span>
+      </div>
+    </form>
+
+    <script src="options.js"></script>
+  </body>
+</html>
