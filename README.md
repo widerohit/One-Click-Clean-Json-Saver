@@ -82,6 +82,33 @@ fetch("https://jsonplaceholder.typicode.com/posts/1")
 9. Click **Save Clean JSON** to download one response.
 10. Click **Export ZIP** to download all captured responses.
 
+## Usage
+
+1. Load the extension in Chrome.
+2. Open any normal website that makes API calls.
+3. Refresh the webpage after loading the extension.
+4. Use the website normally so it triggers `fetch` or XHR API requests.
+5. Click the extension icon.
+6. Captured JSON API responses will appear in the popup.
+
+From the popup, you can:
+
+- Use the main search box to search by API URL or JSON response content.
+- Click **Save** beside the search box to remember that search text.
+- Filter requests by status, method, or domain.
+- Click **Preview** to view the cleaned JSON.
+- Use **Raw** to switch between raw JSON and cleaned JSON.
+- Use **Search inside JSON** to find keys or values inside the preview.
+- Use the arrow buttons to move between JSON search matches.
+- Click **Copy** to copy cleaned JSON.
+- Click **Save Clean JSON** to download one response.
+- Click **Export ZIP** to download all captured responses as separate JSON files in one ZIP.
+- Click **Clear** to remove captured responses for the current tab.
+- Click **Pause Capture** when you do not want new responses captured.
+- Click **Options** to change max stored responses, default search text, and cleaning rules.
+
+The extension icon shows a red badge count when JSON responses are captured on the current tab.
+
 ## How Grouping Works
 
 Duplicate API calls are grouped only when all of these match:

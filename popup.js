@@ -1,3 +1,4 @@
+const mainLayout = document.getElementById("mainLayout");
 const requestList = document.getElementById("requestList");
 const searchInput = document.getElementById("searchInput");
 const saveSearchButton = document.getElementById("saveSearchButton");
@@ -49,14 +50,14 @@ function getHostname(url) {
 
 function getStatusClass(status) {
   if (status >= 200 && status < 300) {
-    return "#0f766e";
+    return "var(--status-ok)";
   }
 
   if (status >= 400) {
-    return "#b42318";
+    return "var(--status-err)";
   }
 
-  return "#7a5d00";
+  return "var(--status-warn)";
 }
 
 function getStatusGroup(status) {
@@ -128,6 +129,31 @@ function formatCaptureTime(timestamp) {
     minute: "2-digit",
     second: "2-digit"
   });
+}
+
+function formatRelativeTime(timestamp) {
+  if (!timestamp) {
+    return "Unknown";
+  }
+
+  const elapsedSeconds = Math.max(0, Math.round((Date.now() - timestamp) / 1000));
+
+  if (elapsedSeconds < 60) {
+    return `${elapsedSeconds}s ago`;
+  }
+
+  const elapsedMinutes = Math.round(elapsedSeconds / 60);
+  if (elapsedMinutes < 60) {
+    return `${elapsedMinutes}m ago`;
+  }
+
+  const elapsedHours = Math.round(elapsedMinutes / 60);
+  if (elapsedHours < 24) {
+    return `${elapsedHours}h ago`;
+  }
+
+  const elapsedDays = Math.round(elapsedHours / 24);
+  return `${elapsedDays}d ago`;
 }
 
 function makeCrcTable() {
@@ -493,6 +519,7 @@ function renderRequests() {
 
     const method = document.createElement("span");
     method.className = "method";
+    method.dataset.method = request.method;
     method.textContent = request.method;
 
     const url = document.createElement("span");
@@ -510,24 +537,35 @@ function renderRequests() {
     count.textContent = `x${request.count}`;
     count.title = `${request.count} matching captures`;
 
+    const info = document.createElement("div");
+    info.className = "request-info";
+
+    const hostChip = document.createElement("span");
+    hostChip.className = "meta-chip";
+    hostChip.textContent = getHostname(request.url) || "Unknown host";
+
+    const sizeChip = document.createElement("span");
+    sizeChip.className = "meta-chip";
+    sizeChip.textContent = formatBytes(request.sizeBytes);
+
+    const timeChip = document.createElement("span");
+    timeChip.className = "meta-chip";
+    timeChip.textContent = `${formatRelativeTime(request.capturedAt)} • ${formatCaptureTime(request.capturedAt)}`;
+
     const actions = document.createElement("div");
     actions.className = "actions";
-
-    const meta = document.createElement("div");
-    meta.className = "request-meta";
-    meta.textContent = `${formatBytes(request.sizeBytes)} | ${formatCaptureTime(request.capturedAt)}`;
-
-    const saveButton = document.createElement("button");
-    saveButton.className = "primary";
-    saveButton.type = "button";
-    saveButton.textContent = "Save Clean JSON";
-    saveButton.addEventListener("click", () => saveRequest(request.id));
 
     const previewButton = document.createElement("button");
     previewButton.className = "preview";
     previewButton.type = "button";
     previewButton.textContent = "Preview";
     previewButton.addEventListener("click", () => previewRequest(request));
+
+    const saveButton = document.createElement("button");
+    saveButton.className = "primary";
+    saveButton.type = "button";
+    saveButton.textContent = "Save JSON";
+    saveButton.addEventListener("click", () => saveRequest(request.id));
 
     const copyButton = document.createElement("button");
     copyButton.className = "secondary";
@@ -539,8 +577,9 @@ function renderRequests() {
     if (request.count > 1) {
       top.appendChild(count);
     }
-    actions.append(saveButton, previewButton, copyButton);
-    item.append(top, meta, actions);
+    info.append(hostChip, sizeChip, timeChip);
+    actions.append(previewButton, saveButton, copyButton);
+    item.append(top, info, actions);
     requestList.appendChild(item);
   });
 
@@ -548,7 +587,7 @@ function renderRequests() {
 }
 
 async function saveRequest(requestId) {
-  setStatus("Preparing clean JSON download...");
+  setStatus("Preparing JSON download...");
 
   const response = await sendMessage({
     type: "SAVE_CLEAN_JSON",
@@ -556,7 +595,7 @@ async function saveRequest(requestId) {
     requestId
   });
 
-  setStatus(response.ok ? "Saved clean JSON file." : response.error);
+  setStatus(response.ok ? "Downloaded JSON file." : response.error);
 }
 
 async function exportAllRequests() {
@@ -626,7 +665,7 @@ async function previewRequest(request) {
   setPreviewContent(currentPreview.cleanJson);
   previewModeButton.textContent = "Raw";
   previewSearchInput.value = "";
-  previewPanel.style.display = "block";
+  mainLayout.classList.add("has-preview");
   setStatus("Previewing cleaned JSON.");
   renderRequests();
 }
@@ -645,7 +684,7 @@ function togglePreviewMode() {
 }
 
 function closePreview(statusMessage = "Preview closed.", shouldRender = true) {
-  previewPanel.style.display = "none";
+  mainLayout.classList.remove("has-preview");
   previewTitle.textContent = "JSON Preview";
   previewTitle.removeAttribute("title");
   previewContent.textContent = "";
@@ -697,7 +736,7 @@ async function copyRequest(requestId) {
     await navigator.clipboard.writeText(response.json);
     setStatus("Copied clean JSON to clipboard.");
   } catch (_error) {
-    setStatus("Clipboard access failed. Try Save Clean JSON instead.");
+    setStatus("Clipboard access failed. Try Save JSON instead.");
   }
 }
 

@@ -6,13 +6,16 @@
     <title>One-Click Clean JSON Saver Options</title>
     <style>
       :root {
-        color-scheme: light;
-        font-family: Arial, Helvetica, sans-serif;
-        --border: #d8dde6;
-        --text: #1f2937;
-        --muted: #667085;
-        --accent: #0f766e;
-        --soft: #f5f7fa;
+        color-scheme: dark;
+        font-family: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        --text: #f1f5f9;
+        --muted: #94a3b8;
+        --border: rgba(148, 163, 184, 0.22);
+        --surface: #0c0c10;
+        --card-bg: linear-gradient(145deg, #14141c 0%, #101016 100%);
+        --accent-from: #059669;
+        --accent-to: #10b981;
+        --violet-glow: rgba(139, 92, 246, 0.14);
       }
 
       * {
@@ -22,89 +25,162 @@
       body {
         max-width: 760px;
         margin: 0 auto;
-        padding: 28px 18px;
+        padding: 0 20px 40px;
         color: var(--text);
-        background: #fff;
+        background: linear-gradient(165deg, #030303 0%, #0a0a0e 45%, #0c0c12 100%);
+        min-height: 100vh;
+      }
+
+      body::before {
+        content: "";
+        display: block;
+        height: 5px;
+        margin: 0 -20px 24px;
+        background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 35%, #a855f7 65%, #ec4899 100%);
       }
 
       h1 {
-        margin: 0 0 6px;
-        font-size: 24px;
+        margin: 0 0 8px;
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        background: linear-gradient(90deg, #f8fafc 0%, #a5b4fc 45%, #c4b5fd 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
       }
 
       p {
-        margin: 0 0 22px;
+        margin: 0 0 26px;
         color: var(--muted);
-        line-height: 1.5;
+        line-height: 1.55;
+        font-size: 15px;
       }
 
       form {
         display: grid;
-        gap: 18px;
+        gap: 20px;
       }
 
       label {
         display: grid;
-        gap: 7px;
+        gap: 8px;
         font-size: 13px;
         font-weight: 700;
+        color: #e2e8f0;
       }
 
       input,
       textarea {
         width: 100%;
         border: 1px solid var(--border);
-        border-radius: 6px;
-        padding: 9px 10px;
+        border-radius: 10px;
+        padding: 11px 12px;
         font: inherit;
+        color: var(--text);
+        background: var(--surface);
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.45);
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      input::placeholder,
+      textarea::placeholder {
+        color: #64748b;
+      }
+
+      input:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #818cf8;
+        box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.28);
       }
 
       textarea {
-        min-height: 92px;
+        min-height: 100px;
         resize: vertical;
+        font-family: "Cascadia Code", Consolas, Monaco, monospace;
+        font-size: 12px;
+        line-height: 1.45;
       }
 
       .toggle {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
-        padding: 12px;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        background: var(--soft);
+        gap: 16px;
+        padding: 16px 18px;
+        border: 1px solid rgba(129, 140, 248, 0.25);
+        border-radius: 14px;
+        background: var(--card-bg);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 28px var(--violet-glow);
+      }
+
+      .toggle label {
+        margin: 0;
       }
 
       .toggle input {
-        width: auto;
+        width: 1.2rem;
+        height: 1.2rem;
+        accent-color: #818cf8;
+        cursor: pointer;
+        flex-shrink: 0;
       }
 
       .hint {
         color: var(--muted);
         font-size: 12px;
-        font-weight: 400;
+        font-weight: 500;
+        line-height: 1.45;
+      }
+
+      .field-card {
+        padding: 16px 18px;
+        border-radius: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        background: var(--card-bg);
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
       }
 
       .actions {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
+        flex-wrap: wrap;
       }
 
       button {
-        height: 36px;
-        border: 1px solid var(--accent);
-        border-radius: 6px;
-        padding: 0 14px;
-        background: var(--accent);
+        height: 40px;
+        border: none;
+        border-radius: 10px;
+        padding: 0 20px;
+        background: linear-gradient(135deg, var(--accent-from) 0%, var(--accent-to) 100%);
         color: #fff;
         cursor: pointer;
-        font-weight: 700;
+        font-weight: 800;
+        font-size: 14px;
+        letter-spacing: 0.01em;
+        box-shadow: 0 2px 12px rgba(16, 185, 129, 0.4);
+        transition: transform 0.1s ease, box-shadow 0.15s ease;
+      }
+
+      button:hover {
+        box-shadow: 0 4px 20px rgba(16, 185, 129, 0.5);
+      }
+
+      button:active {
+        transform: scale(0.98);
+      }
+
+      button:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.45), 0 2px 12px rgba(16, 185, 129, 0.4);
       }
 
       #status {
-        color: var(--muted);
+        color: #6ee7b7;
         font-size: 13px;
+        font-weight: 700;
       }
     </style>
   </head>
@@ -121,23 +197,29 @@
         <input id="captureEnabled" type="checkbox">
       </div>
 
-      <label for="maxRequests">
-        Max responses per tab
-        <input id="maxRequests" type="number" min="10" max="200" step="10">
-        <span class="hint">Allowed range: 10 to 200.</span>
-      </label>
+      <div class="field-card">
+        <label for="maxRequests">
+          Max responses per tab
+          <input id="maxRequests" type="number" min="10" max="200" step="10">
+          <span class="hint">Allowed range: 10 to 200.</span>
+        </label>
+      </div>
 
-      <label for="defaultSearchText">
-        Default search text
-        <input id="defaultSearchText" type="text" placeholder="Example: posts">
-        <span class="hint">Used when the popup opens and no saved popup search exists.</span>
-      </label>
+      <div class="field-card">
+        <label for="defaultSearchText">
+          Default search text
+          <input id="defaultSearchText" type="text" placeholder="Example: posts">
+          <span class="hint">Used when the popup opens and no saved popup search exists.</span>
+        </label>
+      </div>
 
-      <label for="cleanFields">
-        Fields to remove when cleaning JSON
-        <textarea id="cleanFields" spellcheck="false"></textarea>
-        <span class="hint">Comma-separated keys. Example: headers,cookies,metadata,config,request</span>
-      </label>
+      <div class="field-card">
+        <label for="cleanFields">
+          Fields to remove when cleaning JSON
+          <textarea id="cleanFields" spellcheck="false"></textarea>
+          <span class="hint">Comma-separated keys. Example: headers,cookies,metadata,config,request</span>
+        </label>
+      </div>
 
       <div class="actions">
         <button type="submit">Save Options</button>
